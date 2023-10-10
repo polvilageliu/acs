@@ -1,17 +1,13 @@
 package baseNoStates;
 
 public abstract class DoorState {
+  protected DoorState currentState; // Variable para mantener el estado actual
 
-  public DoorState(Door door) {
-
+  // Constructor que establece el estado inicial
+  public DoorState() {
+    currentState = this;
   }
 
-  public Lock(id) {
-
-  }
-
-  public Unlock(id) {
-
-  }
-
+  public abstract void lock();
+  public abstract void unlock();
 }

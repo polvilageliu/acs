@@ -1,18 +1,18 @@
 package baseNoStates;
 
-import baseNoStates.requests.RequestReader;
+import java.lang.System;
+import java.lang.String;
 import org.json.JSONObject;
-
 
 public class Door {
   private final String id;
   private boolean closed; // physically
-  State doorState;
+  private DoorState doorState;
 
-  public Door(String id) {
+  public Door(String id, DoorState initialState) {
     this.id = id;
     closed = true;
-    doorState = new Unlocked(this.id);
+    this.doorState = initialState;
   }
 
   public void processRequest(RequestReader request) {
@@ -45,11 +45,11 @@ public class Door {
         break;
       case Actions.LOCK:
         // TODO
-        doorState = new Locked(this.id);
+        doorState.lock();
         // fall through
       case Actions.UNLOCK:
         // TODO
-        doorState = new Unlocked(this.id);
+        doorState.unlock();
         // fall through
       case Actions.UNLOCK_SHORTLY:
         // TODO
@@ -90,8 +90,9 @@ public class Door {
     return json;
   }
 
-  public void setState(DoorState Door) {
-
+  //Metodo para obtener el estado actual de la puerta
+  public DoorState getDoorState() {
+    return doorState;
   }
 
 }

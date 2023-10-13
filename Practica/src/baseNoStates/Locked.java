@@ -1,8 +1,8 @@
 package baseNoStates;
 
 public class Locked extends DoorState {
-  public Locked() {
-    super(); // Llama al constructor de la clase base para configurar el estado inicial
+  public Locked(Door door) {
+    super(door); // Llama al constructor de la clase base para configurar el estado inicial
   }
 
   public void lock() {
@@ -11,6 +11,6 @@ public class Locked extends DoorState {
 
   public void unlock() {
     System.out.println("Desbloqueando la puerta.");
-    currentState = new Unlocked(); // Cambia el estado actual a Unlocked
+    this.door.changeState(new Unlocked(this.door));
   }
 }

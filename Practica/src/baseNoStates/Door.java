@@ -2,6 +2,8 @@ package baseNoStates;
 
 import java.lang.System;
 import java.lang.String;
+
+import baseNoStates.requests.RequestReader;
 import org.json.JSONObject;
 
 public class Door {
@@ -9,10 +11,10 @@ public class Door {
   private boolean closed; // physically
   private DoorState doorState;
 
-  public Door(String id, DoorState initialState) {
+  public Door(String id) {
     this.id = id;
     closed = true;
-    this.doorState = initialState;
+    this.doorState = new Unlocked(this);
   }
 
   public void processRequest(RequestReader request) {
@@ -32,6 +34,8 @@ public class Door {
       case Actions.OPEN:
         if (closed) {
           closed = false;
+        //} else if (this.getDoorState() == Locked(this)) {
+         // System.out.println("Can't open door " + id + " because it's locked");
         } else {
           System.out.println("Can't open door " + id + " because it's already open");
         }
@@ -45,11 +49,11 @@ public class Door {
         break;
       case Actions.LOCK:
         // TODO
-        doorState.lock();
+        this.doorState.lock();
         // fall through
       case Actions.UNLOCK:
         // TODO
-        doorState.unlock();
+        this.doorState.unlock();
         // fall through
       case Actions.UNLOCK_SHORTLY:
         // TODO
@@ -95,4 +99,7 @@ public class Door {
     return doorState;
   }
 
+  public void changeState(DoorState doorState) {
+    this.doorState = doorState;
+  }
 }

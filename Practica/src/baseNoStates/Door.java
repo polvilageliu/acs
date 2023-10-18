@@ -32,7 +32,9 @@ public class Door {
   private void doAction(String action) {
     switch (action) {
       case Actions.OPEN:
+        System.out.println("Opening door");
         if (closed) {
+
           closed = false;
         //} else if (this.getDoorState() == Locked(this)) {
          // System.out.println("Can't open door " + id + " because it's locked");
@@ -48,13 +50,16 @@ public class Door {
         }
         break;
       case Actions.LOCK:
+        System.out.println("Locking door");
         // TODO
         this.doorState.lock();
         // fall through
+        break;
       case Actions.UNLOCK:
         // TODO
         this.doorState.unlock();
         // fall through
+        break;
       case Actions.UNLOCK_SHORTLY:
         // TODO
         System.out.println("Action " + action + " not implemented yet");
@@ -74,7 +79,7 @@ public class Door {
   }
 
   public String getStateName() {
-    return "unlocked";
+    return doorState.toString();
   }
 
   @Override

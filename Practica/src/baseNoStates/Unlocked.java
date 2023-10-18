@@ -14,4 +14,8 @@ public class Unlocked extends DoorState {
   public void unlock() {
     System.out.println("La puerta ya está desbloqueada.");
   }
+
+  public String toString() {
+    return "unlocked";
+  }
 }

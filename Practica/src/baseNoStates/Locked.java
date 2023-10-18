@@ -13,4 +13,8 @@ public class Locked extends DoorState {
     System.out.println("Desbloqueando la puerta.");
     this.door.changeState(new Unlocked(this.door));
   }
+
+  public String toString() {
+    return "locked";
+  }
 }

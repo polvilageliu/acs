@@ -19,7 +19,7 @@ public class Door {
     this.doorState = new Locked(this);
     this.from = iFrom;
     this.to = iTo;
-    this.from.addDoor(this);
+    //this.from.addDoor(this);
     this.to.addDoor(this);
   }
 

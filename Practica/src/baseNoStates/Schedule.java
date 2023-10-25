@@ -28,14 +28,14 @@ public class Schedule {
   // Check if the date is between the 2 LocalDateTimes specified in the variables
   // if the day is valid and also if the hour of the request is valid
   public boolean inSchedule(LocalDateTime data) {
-    // Comprueba si la fecha está dentro del rango
-    if (data.isAfter(fromD) && data.isBefore(toD)) {
-      // Comprueba si el día de la semana es válido
+    if (data.isAfter(this.fromD) && data.isBefore(this.toD)) {
       if (days.contains(data.getDayOfWeek())) {
-        // Comprueba si la hora y el minuto están dentro del rango
-        if (data.toLocalTime().isAfter(LocalTime.of(this.fromHour, this.fromMinute)) &&
-            data.toLocalTime().isBefore(LocalTime.of(this.toHour, this.toMinute))) {
-          return true;
+        if (data.getHour() >= this.fromHour) {
+          if (data.getHour() <= this.toHour) {
+            if (days.contains(data.getDayOfWeek())) {
+              return true;
+            }
+          }
         }
       }
     }

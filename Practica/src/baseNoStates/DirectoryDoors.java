@@ -6,6 +6,13 @@ import java.util.Arrays;
 public final class DirectoryDoors {
   private static ArrayList<Door> allDoors;
 
+  // The doors are created in DirectoryAreas and then sent to this function to store in allDoors
+  public static void makeDoors(ArrayList<Door> doors) {
+    allDoors = doors;
+  }
+
+  // The doors are now creating in DirectoryAreas so this part is not needed anymore
+  /*
   public static void makeDoors() {
     // basement
     Door d1 = new Door("D1"); // exterior, parking
@@ -24,6 +31,7 @@ public final class DirectoryDoors {
 
     allDoors = new ArrayList<>(Arrays.asList(d1, d2, d3, d4, d5, d6, d7, d8, d9));
   }
+  */
 
   public static Door findDoorById(String id) {
     for (Door door : allDoors) {

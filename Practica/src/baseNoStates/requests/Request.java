@@ -1,6 +1,6 @@
 package baseNoStates.requests;
 
-import org.json.JSONObject;
+import org.json.*;
 
 public interface Request {
   JSONObject answerToJson();

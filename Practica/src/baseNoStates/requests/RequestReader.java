@@ -7,6 +7,7 @@ import baseNoStates.User;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import baseNoStates.UserGroup;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -91,13 +92,29 @@ public class RequestReader implements Request {
   // the result is put into the request object plus, if not authorized, why not,
   // only for testing
   private void authorize(User user, Door door) {
+    authorized = false;
     if (user == null) {
       authorized = false;
       addReason("user doesn't exists");
     } else {
-      //TODO: get the who, where, when and what in order to decide, and if not
-      // authorized add the reason(s)
-      authorized = true;
+      UserGroup group = user.getGroup();
+      if (group.isActionValid(this.action)) {
+        if (group.isDoorValid(door)) {
+          if (group.isDateValid(LocalDateTime.now())) {
+            authorized = true;
+            addReason("acces is permited");
+          } else {
+            authorized = false;
+            addReason("user is out of date");
+          }
+        } else {
+          authorized = false;
+          addReason("door " + door.getId() + " is not accessible for the user");
+        }
+      } else {
+        authorized = false;
+        addReason("user action is not permited");
+      }
     }
   }
 }

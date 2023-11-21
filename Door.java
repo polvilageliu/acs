@@ -1,20 +1,30 @@
 package baseNoStates;
 
-import java.lang.System;
-import java.lang.String;
-
+import baseNoStates.Jerarchy.Space;
+import baseNoStates.doorStates.*;
 import baseNoStates.requests.RequestReader;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
+// In this clase now the state is stored in an object of a class called DoorState
 public class Door {
   private final String id;
-  private boolean closed; // physically
   private DoorState doorState;
+  private Space from;
+  private Space to;
 
-  public Door(String id) {
+  public Door(String id, Space iFrom, Space iTo) {
     this.id = id;
-    closed = true;
-    this.doorState = new Unlocked(this);
+    this.doorState = new Locked(this);
+    this.from = iFrom;
+    this.to = iTo;
+    //this.from.addDoor(this);
+    this.to.addDoor(this);
+  }
+
+  public void setDoorState(DoorState input_door_state) {
+    this.doorState = input_door_state;
   }
 
   public void processRequest(RequestReader request) {
@@ -26,44 +36,32 @@ public class Door {
     } else {
       System.out.println("not authorized");
     }
-    request.setDoorStateName(getStateName());
+    request.setDoorStateName(getLocked());
   }
 
+  // The function below has changed so it follows the functionality of the DoorState class instead
+  // of checking built-in variables to check if it's closed, open, locked or unlocked
   private void doAction(String action) {
     switch (action) {
       case Actions.OPEN:
-        System.out.println("Opening door");
-
-        if(doorState.toString()!="locked") {
-          if (closed) {
-
-            closed = false;
-            //} else if (this.getDoorState() == Locked(this)) {
-            // System.out.println("Can't open door " + id + " because it's locked");
-          } else {
-            System.out.println("Can't open door " + id + " because it's already open");
-          }
+        if (!this.doorState.open()) {
+          System.out.println("Could not open the door, presumably already open or locked");
         }
         break;
       case Actions.CLOSE:
-        if (closed) {
-          System.out.println("Can't close door " + id + " because it's already closed");
-        } else {
-          closed = true;
+        if (!this.doorState.close()) {
+          System.out.println("Could not close the door, presumably already closed or unlocked");
         }
         break;
       case Actions.LOCK:
-        if(closed) {
-          System.out.println("Locking door");
-          // TODO
-          this.doorState.lock();
-          // fall through
+        if (!this.doorState.lock()) {
+          System.out.println("Could not lock the door, presumably already locked or open");
         }
         break;
       case Actions.UNLOCK:
-        // TODO
-        this.doorState.unlock();
-        // fall through
+        if (!this.doorState.unlock()) {
+          System.out.println("Could not unlock the door, presumably already unlocked or open");
+        }
         break;
       case Actions.UNLOCK_SHORTLY:
         // TODO
@@ -76,40 +74,41 @@ public class Door {
   }
 
   public boolean isClosed() {
-    return closed;
+    return this.doorState.isClosed();
   }
 
   public String getId() {
     return id;
   }
-
-  public String getStateName() {
-    return doorState.toString();
+  public ArrayList<Space> getSpaces() {
+    ArrayList<Space> ret = new ArrayList<>();
+    ret.add(this.from);
+    ret.add(this.to);
+    return ret;
   }
+
+  public String getLocked() {
+    return this.doorState.toString();
+  }
+
+  public Space getFromSpace() { return this.from; }
+  public Space getToSpace() { return this.to; }
 
   @Override
   public String toString() {
     return "Door{"
         + ", id='" + id + '\''
-        + ", closed=" + closed
-        + ", state=" + getStateName()
+        + ", closed=" + this.doorState.toString()
+        + ", state=" + getLocked()
         + "}";
   }
 
   public JSONObject toJson() {
     JSONObject json = new JSONObject();
     json.put("id", id);
-    json.put("state", getStateName());
-    json.put("closed", closed);
+    json.put("state", getLocked());
+    json.put("closed", this.doorState.toString());
     return json;
   }
 
-  //Metodo para obtener el estado actual de la puerta
-  public DoorState getDoorState() {
-    return doorState;
-  }
-
-  public void changeState(DoorState doorState) {
-    this.doorState = doorState;
-  }
 }
